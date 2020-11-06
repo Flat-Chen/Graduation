@@ -7,16 +7,16 @@ import RSAJS
 
 
 class Longin():
-
-    def __init__(self, user, password, login_url, login_KeyUrl):
+    def __init__(self, user, password):
         # 初始化程序数据
         self.Username = user
         self.Password = password
         nowTime = lambda: str(round(time.time() * 1000))
         self.now_time = nowTime()
-
-        self.login_url = login_url
-        self.login_Key = login_KeyUrl
+        # 登录主页url
+        self.login_url = "http://211.70.176.172/jwglxt/xtgl/login_slogin.html?language=zh_CN&_t="
+        # 请求PublicKey的URL
+        self.login_Key = "http://211.70.176.172/jwglxt/xtgl/login_getPublicKey.html?time="
 
     def Get_indexHtml(self):
         # 获取教务系统网站
@@ -75,24 +75,19 @@ class Longin():
 
 
 class TimeTable():
-    def __init__(self, session, table_url):
+    def __init__(self, session):
+        # 登录后的课表URL
+        table_url = "http://211.70.176.172/jwglxt/kbcx/xskbcx_cxXsKb.html?gnmkdm=N2151"
         data = {"xnm": 2020, "xqm": 3}
         table_info = session.post(table_url, data=data).json()
         # print(table_info)
         # print(table_info["kbList"])
         for each in table_info["kbList"]:
-            plt = r'{} | {:<8s} | {:<12s} | {:<18s} | {:<29s}'
+            plt = r'{} | {} | {} | {} | {}'
             print(plt.format(each["xqjmc"], each["jc"], each["cdmc"], each["zcd"], each["kcmc"]))
 
 
 if __name__ == "__main__":
-    # 登录主页url
-    login_url = "http://211.70.176.172/jwglxt/xtgl/login_slogin.html?language=zh_CN&_t="
-    # 请求PublicKey的URL
-    login_KeyUrl = "http://211.70.176.172/jwglxt/xtgl/login_getPublicKey.html?time="
-    # 登录后的课表URL
-    table_url = "http://211.70.176.172/jwglxt/kbcx/xskbcx_cxXsKb.html?gnmkdm=N2151"
-
-    zspt = Longin("1708010127", "193728abC", login_url, login_KeyUrl)
+    zspt = Longin("1708010127", "193728abC")
     response_cookies = zspt.Longin_Home()
-    table = TimeTable(response_cookies, table_url)
+    table = TimeTable(response_cookies)
