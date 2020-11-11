@@ -37,7 +37,7 @@ class Longin():
         # 获取到csrftoken
         lxml = etree.HTML(self.response)
         self.csrftoken = lxml.xpath("//input[@id='csrftoken']/@value")[0]
-        print(self.csrftoken)
+        # print(self.csrftoken)
 
     def Get_PublicKey(self):
         # 获取到加密公钥
@@ -45,15 +45,15 @@ class Longin():
         key_data = key_html.json()
         self.modulus = key_data["modulus"]
         self.exponent = key_data["exponent"]
-        print(self.modulus)
-        print(self.exponent)
+        # print(self.modulus)
+        # print(self.exponent)
 
     def Get_RSA_Password(self):
         # 生成RSA加密密码
         rsaKey = RSAJS.RSAKey()
         rsaKey.setPublic(HB64().b642hex(self.modulus), HB64().b642hex(self.exponent))
         self.enPassword = HB64().hex2b64(rsaKey.encrypt(self.Password))
-        print(self.enPassword)
+        # print(self.enPassword)
 
     def Longin_Home(self):
         # 登录信息门户,成功返回session对象
@@ -67,7 +67,7 @@ class Longin():
         # 当提交的表单是正确的，url会跳转到主页，所以此处根据url有没有跳转来判断是否登录成功
         if login_html.url.find("login_slogin.html") == -1:  # -1没找到，说明已经跳转到主页
             print("登录成功")
-            print(login_html.url)
+            # print(login_html.url)
             return self.session
         else:
             print("用户名或密码不正确，登录失败")
@@ -80,11 +80,18 @@ class TimeTable():
         table_url = "http://211.70.176.172/jwglxt/kbcx/xskbcx_cxXsKb.html?gnmkdm=N2151"
         data = {"xnm": 2020, "xqm": 3}
         table_info = session.post(table_url, data=data).json()
-        # print(table_info)
-        # print(table_info["kbList"])
+        self.table_info = table_info
         for each in table_info["kbList"]:
             plt = r'{} | {} | {} | {} | {}'
             print(plt.format(each["xqjmc"], each["jc"], each["cdmc"], each["zcd"], each["kcmc"]))
+
+    def get_class_schedule(self):
+        class_schedule = {}
+        for each in self.table_info["kbList"]:
+            class_schedule[each["xqjmc"]] = {'节程': each["jc"], '教室': each["cdmc"], '课时': each["zcd"],
+                                             '课程名称': each["kcmc"]}
+        # print(class_schedule)
+        return class_schedule
 
 
 if __name__ == "__main__":
