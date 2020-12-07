@@ -84,6 +84,9 @@ class TimeTable():
             plt = r'{} | {:<8s} | {:<12s} | {:<18s} | {:<29s}'
             print(plt.format(each["xqjmc"], each["jc"], each["cdmc"], each["zcd"], each["kcmc"]))
 
+    def get_class_schedule(self):
+        pass
+
 
 if __name__ == "__main__":
     # 登录主页url

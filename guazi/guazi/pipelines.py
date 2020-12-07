@@ -5,12 +5,10 @@
 
 
 # useful for handling different item types with a single interface
-# from itemadapter import ItemAdapter
 import logging
 import os
 import pathlib
 from hashlib import md5
-
 import pandas as pd
 import pymongo
 from pybloom_live import ScalableBloomFilter
