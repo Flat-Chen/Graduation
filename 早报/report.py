@@ -19,7 +19,7 @@ class report:
         print('今天是:', self.week_dict[dayOfWeek])
         print('今天的课程是:', class_schedule[self.week_dict[dayOfWeek]])
         for i in class_schedule[self.week_dict[dayOfWeek]].keys():
-            print(i, '  :  ', class_schedule[self.week_dict[dayOfWeek]][i])
+            print(i, (6 - len(i)) * ' ', ':  ', class_schedule[self.week_dict[dayOfWeek]][i])
 
 
 if __name__ == '__main__':
